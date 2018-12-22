@@ -12,7 +12,7 @@ Every day we need to extract and manipulate information from different incompati
 ## Features
 
 - [X] Kotlin script for extracting values from json
-- [ ] Golang script for comparing current mobile translations and new from translator
-- [ ] Golang merging tool for translations 
-- [ ] Golang web application for managing versions of translations
-- [ ] Uploading screenshots for translations 
+- [ ] Script for comparing current mobile translations and new from translator
+- [ ] Merging tool for translations 
+- [ ] Generating ios/android resource files from translations
+
