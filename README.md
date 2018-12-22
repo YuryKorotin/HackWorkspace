@@ -1,4 +1,3 @@
-femaleShort - Жен
 # Hack workspace
 
 ## Description
