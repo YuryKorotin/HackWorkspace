@@ -1,0 +1,9 @@
+{
+  "translateArray": {
+      "general": "Общее",
+      "family": "Семья",
+      "alcohol": "Алкоголь",
+      "maleShort": "Муж",
+      "femaleShort": "Жен"
+  }
+}
