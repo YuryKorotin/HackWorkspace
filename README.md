@@ -11,6 +11,9 @@ Every day we need to extract and manipulate information from different incompati
 ## Features
 
 - [X] Kotlin script for extracting values from json
+- [X] Script for extracting texts from json
+- [X] Script for decorating texts
+- [ ] Script for saving texts to json
 - [ ] Script for exporting string resources from android application
 - [ ] Script for exporting string resources from ios application
 - [ ] Script for exporting sqlite database to json,csv format for translator
