@@ -1,0 +1,74 @@
+ [
+  {
+    "key": "",
+    "parent_key": "",
+    "text": "tempo",
+    "type": 1,
+    "cycle_state": false,
+    "pack_name": "default",
+    "language": "fr"
+  },
+  {
+    "key": "",
+    "parent_key": "",
+    "text": "tempo",
+    "type": 1,
+    "cycle_state": false,
+    "pack_name": "default",
+    "language": "fr"
+  },
+  {
+    "key": "",
+    "parent_key": "",
+    "text": "temp",
+    "type": 1,
+    "cycle_state": false,
+    "pack_name": "default",
+    "language": "fr"
+  },
+  {
+    "key": "",
+    "parent_key": "",
+    "text": "Temp",
+    "type": 1,
+    "cycle_state": false,
+    "pack_name": "default",
+    "language": "fr"
+  },
+  {
+    "key": "",
+    "parent_key": "",
+    "text": "Temporo",
+    "type": 1,
+    "cycle_state": false,
+    "pack_name": "default",
+    "language": "fr"
+  },
+  {
+    "key": "",
+    "parent_key": "",
+    "text": "If you've ever moaned because you lost at thumb-wrestling, saying that your opponent lifted their hand",
+    "type": 1,
+    "cycle_state": false,
+    "pack_name": "default",
+    "language": "en"
+  },
+  {
+    "key": "",
+    "parent_key": "",
+    "text": "If you've ever managed to lick you elbow",
+    "type": 1,
+    "cycle_state": false,
+    "pack_name": "default",
+    "language": "en"
+  },
+  {
+    "key": "",
+    "parent_key": "",
+    "text": "If you've ever worn briefs",
+    "type": 1,
+    "cycle_state": false,
+    "pack_name": "default",
+    "language": "en"
+  }
+]
