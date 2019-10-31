@@ -39,16 +39,15 @@ fun readFromFileToString(directory: String = "./inputs/", fileName: String = "ru
 fun writeToFile(directory: String = "./results/", fileName: String = "rules.txt", result : List<String>) {
   File(directory.plus(fileName)).printWriter().use { out ->
     result.forEachIndexed{ index, item ->
-      out.print(item)
-      if (index != result.size - 1) {
-        out.println(", ")
-      }
+      out.println(item)
     }
   }
 }
 
 fun transformTexts(texts: MutableList<String>) {
-	val templatesToSearch = mapOf("If you\'ve ever" to "Never have I ever", "your" to "my", "you" to "I").toSortedMap(compareByDescending<String> { it.length }) 
+	//val templatesToSearch = mapOf("If you\'ve ever" to "Never have I ever", "your" to "my", "you" to "I").toSortedMap(compareByDescending<String> { it.length }) 
+
+	val templatesToSearch = mapOf("If you\'ve ever" to "Never have I ever", "your" to "my").toSortedMap(compareByDescending<String> { it.length }) 
 
 	texts.forEachIndexed { index, text ->
 		var tempText = text
