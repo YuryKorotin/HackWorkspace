@@ -6,7 +6,7 @@ import com.beust.klaxon.*
 
 //DEPS com.beust:klaxon:3.0.1
 //INCLUDE rule.kt
-
+//INCLUDE expression.kt
 
 fun readFromFile(directory: String = "./inputs/", fileName: String = "rules.txt") : List<String> {
   val bufferedReader = File(directory.plus(fileName)).bufferedReader()
@@ -44,29 +44,36 @@ fun writeToFile(directory: String = "./results/", fileName: String = "packages.j
   }
 }
 
-fun createJsonForTexts() {
-  val localeToExtract = "en" 
-  
-  val lastId = 4234L 
-
-  val expressions = readFromFileToString()
-
-  val expressionCollection = expressions.split("\n")
-
-  val texts : MutableList<String> = mutableListOf()
-
-  val expressionCollection.map {Expression(it)}
-
-  val expressionJson = Klaxon().toJsonString(Expression())
-  
-  rules?.filter { it.language.equals(localeToExtract) }?.forEach { texts.add(it.text) }
-
-  transformTexts(texts)
-
-  writeToFile(result = texts)
+fun writeStringToFile(directory: String = "./results/", fileName: String = "texts.json", result : String) {
+  File(directory.plus(fileName)).printWriter().use { out ->
+    out.println(result)
+  }
 }
 
-extractFromJson()
+fun createJsonForTexts() {
+  val locale = "en" 
+  
+  val lastId = 4234L 
+  val img = "customs (4).svg"
+  val level = "0"
+  val categoryId = "8"
+  val packId = "24"
+
+  val texts = readFromFileToString(fileName = "texts.txt")
+  val textsCollection = texts.split("\n")
+
+  val results : MutableList<String> = mutableListOf()
+
+  val expressions = textsCollection.mapIndexed { index, item ->
+    Expression(categoryId, index + lastId, img, level, locale, packId, item, "") 
+  }
+
+  val expressionJson = Klaxon().toJsonString(expressions)
+  
+  writeStringToFile(result = expressionJson)
+}
+
+createJsonForTexts()
 
 /*
 {
