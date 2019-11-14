@@ -1,0 +1,3 @@
+avatar1.svg
+avatar2.svg
+avatar4.svg

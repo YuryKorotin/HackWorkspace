@@ -53,17 +53,26 @@ fun writeStringToFile(directory: String = "./results/", fileName: String = "text
 fun createJsonForTexts(locale: String = "en", 
                        lastId: Long = 4234L,
                        packId: String = "24") {  
-  val img = "customs (4).svg"
+  var img = "customs (4).svg"
   val categoryId = "8"
   val level = "0"
 
   val texts = readFromFileToString(fileName = "texts.txt")
   val textsCollection = texts.split("\n")
 
+  val avatars = readFromFileToString(fileName = "avatars.txt")
+  val avatarsCollection = avatars.split("\n")
+
   val results : MutableList<String> = mutableListOf()
 
   val expressions = textsCollection.mapIndexed { index, item ->
-    Expression(categoryId, "${index + lastId}", img, level, locale, packId, item, "") 
+    var avatarIndex = 0
+    if (index >= avatarsCollection.size) {
+       avatarIndex = avatarsCollection.size - 1
+    } else {
+       avatarIndex = index
+    }
+    Expression(categoryId, "${index + lastId}", avatarsCollection[avatarIndex], level, locale, packId, item, "") 
   }
 
   val expressionJson = Klaxon().toJsonString(expressions)
