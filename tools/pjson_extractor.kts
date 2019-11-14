@@ -57,6 +57,12 @@ fun transformTexts(texts: MutableList<String>) {
     }
 }
 
+fun areNoTags(task: Task) {
+    val tags = listOf("<M>", "<F>", "<N>", "<D>", "<S>", "<A>", "<X>", "<P>")
+
+    return tags.find { task.text_en.contains(t) } == null
+}
+
 fun extractFromJson() {
   var objectString = readFromFileToString()
 
@@ -64,9 +70,9 @@ fun extractFromJson() {
 
   val tasks = Klaxon().parseArray<Task>(objectString)
   
-  tasks?.forEach { 
-    if (!it.text_en.orEmpty().contains("<D>") &&
-         !it.text_en.orEmpty().contains("<F>")) {
+
+  tasks?.filter {it.text_en.orEmpty().isNotEmpty()}.forEach { 
+    if (areNoTags(it)) {
       texts.add(it.text_en.orEmpty())
     } 
   }
