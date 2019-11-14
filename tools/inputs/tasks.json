@@ -1,0 +1,44 @@
+[
+    {
+        "category_old_id": 2,
+        "id": 0,
+        "level": 3,
+        "level0": 3,
+        "need_translate": 0,
+        "pack_id": 8,
+        "text_de": "",
+        "text_en": "Do you like a healthy lifestyle? Drink any alcoholic beverage or do 15 pushups.",
+        "text_es": "",
+        "text_fr": "",
+        "text_it": "",
+        "text_ru": "ты за здоровый образ жизни? Выпей какой-нибудь алкогольный напиток или же отожмись 15 раз."
+    },
+    {
+        "category_old_id": 2,
+        "id": 1,
+        "level": 3,
+        "level0": 3,
+        "need_translate": 1,
+        "pack_id": 9,
+        "text_de": "jedes Mal, wenn der <D> Spieler ein Glas anfasst, musst du einen Orgasmus imitieren",
+        "text_en": "Every time player <D> touches a glass, you must imitate an orgasm.",
+        "text_es": "Cada vez que un jugador <D> toca un vaso, debe imitar un orgasmo.",
+        "text_fr": "Chaque fois qu'un joueur <D> touche un verre, vous devez imiter un orgasme.",
+        "text_it": "Ogni volta che il giocatore <D> tocca il bicchiere, devi imitare un orgasmo",
+        "text_ru": "Каждый раз, когда игрок <D> дотрагивается до бокала, ты должен(должна) имитировать оргазм"
+    },
+    {
+        "category_old_id": 2,
+        "id": 2,
+        "level": 3,
+        "level0": 3,
+        "need_translate": 0,
+        "pack_id": 8,
+        "text_de": "",
+        "text_en": "",
+        "text_es": "",
+        "text_fr": "",
+        "text_it": "",
+        "text_ru": "начинаешь ты! Игроки по очереди по несколько капель доливают в стакан (рюмку, бокал) любой алкогольный напиток. Тот игрок, у которого перелилось - выполняет какое-нибудь наказание (придумывают присутствующие)."
+    }
+]
