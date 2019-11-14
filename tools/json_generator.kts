@@ -63,7 +63,7 @@ fun createJsonForTexts(locale: String = "en",
   val results : MutableList<String> = mutableListOf()
 
   val expressions = textsCollection.mapIndexed { index, item ->
-    Expression(categoryId, index + lastId, img, level, locale, packId, item, "") 
+    Expression(categoryId, "${index + lastId}", img, level, locale, packId, item, "") 
   }
 
   val expressionJson = Klaxon().toJsonString(expressions)
@@ -71,4 +71,4 @@ fun createJsonForTexts(locale: String = "en",
   writeStringToFile(result = expressionJson, fileName = "${packId}.json")
 }
 
-createJsonForTexts()
+createJsonForTexts(packId = "24", locale = "en", lastId = 4234L)

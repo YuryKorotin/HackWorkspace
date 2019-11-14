@@ -1,5 +1,5 @@
 class Expression(val category_id: String,
-      val id: Long,
+      val id: String,
       val img: String,
       val level: String,
       val locale: String,
