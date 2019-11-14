@@ -50,14 +50,12 @@ fun writeStringToFile(directory: String = "./results/", fileName: String = "text
   }
 }
 
-fun createJsonForTexts() {
-  val locale = "en" 
-  
-  val lastId = 4234L 
+fun createJsonForTexts(locale: String = "en", 
+                       lastId: Long = 4234L,
+                       packId: String = "24") {  
   val img = "customs (4).svg"
-  val level = "0"
   val categoryId = "8"
-  val packId = "24"
+  val level = "0"
 
   val texts = readFromFileToString(fileName = "texts.txt")
   val textsCollection = texts.split("\n")
@@ -70,20 +68,7 @@ fun createJsonForTexts() {
 
   val expressionJson = Klaxon().toJsonString(expressions)
   
-  writeStringToFile(result = expressionJson)
+  writeStringToFile(result = expressionJson, fileName = "${packId}.json")
 }
 
 createJsonForTexts()
-
-/*
-{
-        "category_id": "8",
-        "id": "4",
-        "img": "customs (4).svg",
-        "level": "0",
-        "locale": "en",
-        "pack_id": "",
-        "text": "Never have I ever Been to Spain",
-        "type": ""
-    },
-*/
