@@ -61,6 +61,12 @@ fun transformTexts(texts: MutableList<String>) {
     }
 }
 
+fun areNoTags(task: Task) {
+    val tags = listOf("<M>", "<F>", "<N>", "<D>", "<S>", "<A>", "<X>", "<P>")
+
+    return tags.find { task.text_en.contains(t) } == null
+}
+
 fun extractFromJson() {
   val tagsArray = listOf("<M>", "<F>", "<N>", "<D>", "<S>", "<A>", "<X>", "<P>")
 
@@ -72,7 +78,7 @@ fun extractFromJson() {
 
   runBlocking {
     val tasks = Klaxon().parseArray<Task>(objectString.await())
-  
+
     val mappings = imagesMappingsString.await()
 
     tasks?.forEach { it ->
