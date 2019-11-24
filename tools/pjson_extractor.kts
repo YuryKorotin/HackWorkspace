@@ -48,6 +48,12 @@ fun writeToFile(directory: String = "./results/", fileName: String = "tasks.txt"
   }
 }
 
+fun writeStringToFile(directory: String = "./results/", fileName: String = "tasks.txt", result : String) {
+  File(directory.plus(fileName)).printWriter().use { out ->
+    out.println(result)
+  }
+}
+
 fun transformTexts(texts: MutableList<String>) {
     val templatesToSearch = mapOf("<F>" to "", "<D>" to "").toSortedMap(compareByDescending<String> { it.length }) 
 
@@ -64,31 +70,68 @@ fun transformTexts(texts: MutableList<String>) {
 fun areNoTags(task: Task) {
     val tags = listOf("<M>", "<F>", "<N>", "<D>", "<S>", "<A>", "<X>", "<P>")
 
-    return tags.find { task.text_en.contains(t) } == null
+    return tags.find { task.text_en.contains(t) || task.text_de.contains(t) || task.text_ru.contains(t) } == null
 }
 
+suspend fun createPunishTask(task: Task, index: Int, locale: String) : PunishTask{
+  val punishTaskOffset = 3670
+
+  var content = task.text_en
+
+  if (locale.equals("en")) {
+    content = task.text_en
+  } else if (locale.equals("de")) {
+    content = task.text_de
+  } else if (locale.equals("ru")) {
+    content - task.text_ru
+  }
+
+  return PunishTask(task.category_old_id, 
+        "${index + punishTaskOffset}", "customs (4).svg", task.level, locale, task.pack_id, content)
+} 
+
 fun extractFromJson() {
-  val tagsArray = listOf("<M>", "<F>", "<N>", "<D>", "<S>", "<A>", "<X>", "<P>")
+  val packageOffset = 19
 
-  val imagesMappingsString = GlobalScope.async {readFromFileToString(fileName = "avatars.txt")} 
+  val imagesMappingsString = GlobalScope.async { readFromFileToString(fileName = "avatars.txt") } 
 
-  var objectString = GlobalScope.async { readFromFileToString()}
+  var objectString = GlobalScope.async { readFromFileToString() }
 
-  val texts : MutableList<String> = mutableListOf()
+  val texts : Array<PunishTask> = mutableListOf()
 
   runBlocking {
     val tasks = Klaxon().parseArray<Task>(objectString.await())
 
     val mappings = imagesMappingsString.await()
 
-    tasks?.forEach { it ->
-      if (!it.text_en.orEmpty().contains("<D>") &&
-         !it.text_en.orEmpty().contains("<F>")) {
-        texts.add(it.text_en.orEmpty())
-      } 
-    }
+    val punishTasks = mutableListOf<PunishTask>()
+    val filteredTasks = tasks?.filter{ areNoTags(it) }
 
-    writeToFile(result = texts)
+    var i = 0
+    var j = 0
+    while (i < filtetedTasks.size) {
+      i++
+      
+      val item = filteredTasks[i]
+
+      if (item.text_en.isNullOrEmpty) {
+        filtetedTasks.add(createPunishTask(filteredTasks[i], j, "en"))
+        j++;
+      }
+      if (item.text_de.isNullOrEmpty) {
+        filtetedTasks.add(createPunishTask(filteredTasks[i], j, "de"))
+        j++;
+      }
+
+      if (item.text_ru.isNullOrEmpty) {
+        filtetedTasks.add(createPunishTask(filteredTasks[i], j, "ru"))
+        j++;
+      }
+    }
+    
+    val punishJson = Klaxon().toJsonString(punishTasks.toList())
+
+    writeStringToFile(result = texts, fileName = "punish_tasks.json")
   }
 }
 
