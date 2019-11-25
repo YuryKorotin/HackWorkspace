@@ -10,6 +10,7 @@ import kotlinx.coroutines.*
 @file:DependsOn("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.2")
 //DEPS com.beust:klaxon:3.0.1
 //INCLUDE task.kt
+//INCLUDE punish_task.kt
 
 
 fun readFromFile(directory: String = "./inputs/", fileName: String = "input.json") : List<String> {
@@ -67,71 +68,114 @@ fun transformTexts(texts: MutableList<String>) {
     }
 }
 
-fun areNoTags(task: Task) {
+fun areNoTags(task: Task): Boolean {
     val tags = listOf("<M>", "<F>", "<N>", "<D>", "<S>", "<A>", "<X>", "<P>")
 
-    return tags.find { task.text_en.contains(t) || task.text_de.contains(t) || task.text_ru.contains(t) } == null
+    return tags.find { task.text_en?.contains(it) ?: false || task.text_de?.contains(it) ?: false || task.text_ru?.contains(it) ?: false } == null
 }
 
-suspend fun createPunishTask(task: Task, index: Int, locale: String) : PunishTask{
+suspend fun createPunishTask(task: Task, index: Int, locale: String, avatarMappings : Map<String, String>) : PunishTask{
   val punishTaskOffset = 3670
 
-  var content = task.text_en
+  var imagePath = "customs (4).svg"
 
-  if (locale.equals("en")) {
-    content = task.text_en
-  } else if (locale.equals("de")) {
-    content = task.text_de
-  } else if (locale.equals("ru")) {
-    content - task.text_ru
+  for ((k, v) in avatarMappings) {
+    if (task.text_ru?.contains(k)?: false) {      
+      imagePath = v
+      break            
+    }
+    if (task.text_en?.contains(k) ?: false) {      
+      imagePath = v
+      break            
+    }
   }
 
-  return PunishTask(task.category_old_id, 
-        "${index + punishTaskOffset}", "customs (4).svg", task.level, locale, task.pack_id, content)
+  var content = task.text_en ?: ""
+
+  if (locale.equals("en")) {
+    content = task.text_en!!
+  } else if (locale.equals("de")) {
+    content = task.text_de!!
+  } else if (locale.equals("ru")) {
+    content = task.text_ru!!
+  }
+
+  return PunishTask("${task.category_old_id}", 
+        "${index + punishTaskOffset}", imagePath, "${task.level}", locale, "${task.pack_id}", content)
 } 
+
+fun createImageMap(imageString: String): Map<String, String> {
+  val imageMap = mutableMapOf<String, String>()
+
+  val imageVocabulary = imageString.split("\n")
+
+  for (i in 0 until imageVocabulary.size) {
+    val imageRule = imageVocabulary[i]
+
+    val terms = imageRule.split("|")
+
+    println(terms)
+
+    val russianTerms = terms[0].split(",")
+
+    val englishTerms = terms[1].split(",")
+
+    val targetImage = terms[2] + terms[3] + ".png"
+
+    for (j in 0 until russianTerms.size) {
+      imageMap[russianTerms[j]] = targetImage      
+    }
+
+    for (j in 0 until englishTerms.size) {
+      imageMap[englishTerms[j]] = targetImage      
+    }
+  }
+  return imageMap.toMap()
+}
 
 fun extractFromJson() {
   val packageOffset = 19
 
-  val imagesMappingsString = GlobalScope.async { readFromFileToString(fileName = "avatars.txt") } 
+  val imagesMappingsString = GlobalScope.async { readFromFileToString(fileName = "avatars_meta.txt") } 
 
   var objectString = GlobalScope.async { readFromFileToString() }
-
-  val texts : Array<PunishTask> = mutableListOf()
 
   runBlocking {
     val tasks = Klaxon().parseArray<Task>(objectString.await())
 
-    val mappings = imagesMappingsString.await()
+    val mappingString = imagesMappingsString.await()
+
+    val avatarMappings : Map<String, String> = createImageMap(mappingString)
 
     val punishTasks = mutableListOf<PunishTask>()
-    val filteredTasks = tasks?.filter{ areNoTags(it) }
+
+    val filteredTasks = tasks!!.filter{ areNoTags(it) }
 
     var i = 0
     var j = 0
-    while (i < filtetedTasks.size) {
-      i++
-      
+
+    while (i < filteredTasks.size) {
       val item = filteredTasks[i]
 
-      if (item.text_en.isNullOrEmpty) {
-        filtetedTasks.add(createPunishTask(filteredTasks[i], j, "en"))
+      if (item.text_en.isNullOrEmpty()) {
+        punishTasks.add(createPunishTask(filteredTasks[i], j, "en", avatarMappings))
         j++;
       }
-      if (item.text_de.isNullOrEmpty) {
-        filtetedTasks.add(createPunishTask(filteredTasks[i], j, "de"))
+      if (item.text_de.isNullOrEmpty()) {
+        punishTasks.add(createPunishTask(filteredTasks[i], j, "de", avatarMappings))
         j++;
       }
 
-      if (item.text_ru.isNullOrEmpty) {
-        filtetedTasks.add(createPunishTask(filteredTasks[i], j, "ru"))
+      if (item.text_ru.isNullOrEmpty()) {
+        punishTasks.add(createPunishTask(filteredTasks[i], j, "ru", avatarMappings))
         j++;
       }
+      i++
     }
     
     val punishJson = Klaxon().toJsonString(punishTasks.toList())
 
-    writeStringToFile(result = texts, fileName = "punish_tasks.json")
+    writeStringToFile(result = punishJson, fileName = "punish_tasks.json")
   }
 }
 
