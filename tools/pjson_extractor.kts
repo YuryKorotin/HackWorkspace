@@ -75,7 +75,11 @@ fun areNoTags(task: Task): Boolean {
 }
 
 suspend fun createPunishTask(task: Task, index: Int, locale: String, avatarMappings : Map<String, String>) : PunishTask{
-  val punishTaskOffset = 3670
+  //val punishTaskOffset = 3670 843 3409
+  //val punishTaskOffset = 3670 + 1411
+  val punishTaskOffset = 9621
+
+  val packageOffset = 19
 
   var imagePath = "customs (4).svg"
 
@@ -101,10 +105,10 @@ suspend fun createPunishTask(task: Task, index: Int, locale: String, avatarMappi
   }
 
   return PunishTask("${task.category_old_id}", 
-        "${index + punishTaskOffset}", imagePath, "${task.level}", locale, "${task.pack_id}", content)
+        "${index + punishTaskOffset}", imagePath, "${task.level}", locale, "${task.pack_id + packageOffset}", content)
 } 
 
-fun createImageMap(imageString: String): Map<String, String> {
+suspend fun createImageMap(imageString: String): Map<String, String> {
   val imageMap = mutableMapOf<String, String>()
 
   val imageVocabulary = imageString.split("\n")
@@ -134,8 +138,6 @@ fun createImageMap(imageString: String): Map<String, String> {
 }
 
 fun extractFromJson() {
-  val packageOffset = 19
-
   val imagesMappingsString = GlobalScope.async { readFromFileToString(fileName = "avatars_meta.txt") } 
 
   var objectString = GlobalScope.async { readFromFileToString() }
@@ -151,22 +153,28 @@ fun extractFromJson() {
 
     val filteredTasks = tasks!!.filter{ areNoTags(it) }
 
+    println("Tasks were filtered")
+
     var i = 0
     var j = 0
 
     while (i < filteredTasks.size) {
+      println("${i} task is processing")
       val item = filteredTasks[i]
 
-      if (item.text_en.isNullOrEmpty()) {
+      if (!item.text_en.isNullOrEmpty()) {
+        println("${j} task is created")
         punishTasks.add(createPunishTask(filteredTasks[i], j, "en", avatarMappings))
         j++;
       }
-      if (item.text_de.isNullOrEmpty()) {
+      if (!item.text_de.isNullOrEmpty()) {
+        println("${j} task is created")
         punishTasks.add(createPunishTask(filteredTasks[i], j, "de", avatarMappings))
         j++;
       }
 
-      if (item.text_ru.isNullOrEmpty()) {
+      if (!item.text_ru.isNullOrEmpty()) {
+        println("${j} task is created")
         punishTasks.add(createPunishTask(filteredTasks[i], j, "ru", avatarMappings))
         j++;
       }
